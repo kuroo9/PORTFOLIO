@@ -5,7 +5,7 @@ import emailjs from '@emailjs/browser';
 const portfolioData = {
   name: "ADITYA's portfolio",
   title: "Creative Developer",
-  about: "I'm a pasionate developer with expertise in creating web applications using modern technologies. I enjoy turning complex problems into simple, beautiful solutions.",
+  about: "I'm a passionate developer with expertise in creating web applications using modern technologies. I enjoy turning complex problems into simple, beautiful solutions.",
   email: "ashriwas688@gmail.com",
   phone: "+917028685307",
   address: "INDIA,PUNE",
@@ -366,6 +366,7 @@ export default function App() {
           position: relative;
           width: 350px;
           height: 350px;
+          perspective: 1000px;
         }
 
         .main-image {
@@ -380,7 +381,8 @@ export default function App() {
           background: var(--background);
           position: relative;
           z-index: 2;
-          animation: rotateAndScale 10s linear infinite;
+          animation: float 6s ease-in-out infinite;
+          box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
 
         .main-image img {
@@ -396,9 +398,44 @@ export default function App() {
           filter: grayscale(0%);
         }
 
-        @keyframes rotateAndScale {
-          0%, 100% { transform: rotate(0deg) scale(1); }
-          50% { transform: rotate(360deg) scale(1.05); }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
+          50% { transform: translateY(-20px) rotateX(5deg) rotateY(5deg); }
+        }
+
+        /* Tech Stack Orbit Animation */
+        .tech-orbit {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          border: 1px dashed var(--primary-color);
+          border-radius: 50%;
+          top: 0;
+          left: 0;
+          animation: spin 20s linear infinite;
+        }
+
+        .tech-icon {
+          position: absolute;
+          width: 40px;
+          height: 40px;
+          background: white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.2rem;
+          box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .tech-icon:nth-child(1) { top: -20px; left: 50%; transform: translateX(-50%); }
+        .tech-icon:nth-child(2) { bottom: -20px; left: 50%; transform: translateX(-50%); }
+        .tech-icon:nth-child(3) { left: -20px; top: 50%; transform: translateY(-50%); }
+        .tech-icon:nth-child(4) { right: -20px; top: 50%; transform: translateY(-50%); }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
 
         .floating-element {
@@ -703,7 +740,7 @@ export default function App() {
         }
 
         .project-card:hover {
-          transform: translateY(-10px);
+          transform: translateY(-10px) rotateY(5deg);
           box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
         }
 
@@ -957,6 +994,7 @@ export default function App() {
           color: white;
           padding: 4rem 0 1rem;
           text-align: center;
+          position: relative;
         }
 
         .footer .container {
@@ -1201,7 +1239,7 @@ function HeroSection({ data }) {
       
       <div className="hero-content">
         <div className="hero-text">
-          <h6 className="hero-greeting">Hello, I'm</h6>
+          <h6 className="hero-greeting">Hello, I'm </h6>
           <h1 className="hero-title">ADITYA SHRIWAS</h1>
           <h2 className="hero-subtitle">
             <span className="typewriter">{data.title}</span>
@@ -1222,6 +1260,12 @@ function HeroSection({ data }) {
           <div className="image-container">
             <div className="main-image">
               <img src="/531500995_18088666294758908_1262871774284512153_n.jpg" alt="AdityA shriwas" />
+            </div>
+            <div className="tech-orbit">
+              <div className="tech-icon" title="React"><i className="fab fa-react"></i></div>
+              <div className="tech-icon" title="Node.js"><i className="fab fa-node-js"></i></div>
+              <div className="tech-icon" title="Python"><i className="fab fa-python"></i></div>
+              <div className="tech-icon" title="JavaScript"><i className="fab fa-js"></i></div>
             </div>
             <div className="floating-element element-1"></div>
             <div className="floating-element element-2"></div>
@@ -1389,8 +1433,6 @@ function ProjectsSection({ data }) {
 }
 
 // Contact Section Component
-
-
 function ContactSection({ data }) {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formStatus, setFormStatus] = useState('');
@@ -1403,18 +1445,16 @@ function ContactSection({ data }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormStatus('sending');
-// ...existing code...
-emailjs.send(
-  process.env.REACT_APP_EMAILJS_SERVICE_ID,
-  process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
-  {
-    from_name: formData.name,
-    from_email: formData.email,
-    message: formData.message,
-  },
-  process.env.REACT_APP_EMAILJS_PUBLIC_KEY
-)
-
+    emailjs.send(
+      process.env.REACT_APP_EMAILJS_SERVICE_ID,
+      process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+      {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message,
+      },
+      process.env.REACT_APP_EMAILJS_PUBLIC_KEY
+    )
     .then(() => {
       setFormStatus('success');
       setFormData({ name: '', email: '', message: '' });
@@ -1563,6 +1603,7 @@ function Footer({ data }) {
         
         <div className="footer-bottom">
           <p>&copy; {new Date().getFullYear()} {data.name}. All rights reserved.</p>
+          <span style={{ fontSize: '1.5rem', animation: 'float 3s ease-in-out infinite' }}>🚀</span>
         </div>
       </div>
     </footer>
