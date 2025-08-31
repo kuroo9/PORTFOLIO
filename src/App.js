@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import emailjs from '@emailjs/browser';
 
+
 // Sample data - replace with your actual information
 const portfolioData = {
   name: "ADITYA's portfolio",
@@ -1239,7 +1240,7 @@ function HeroSection({ data }) {
       
       <div className="hero-content">
         <div className="hero-text">
-          <h6 className="hero-greeting">Hello, I'm </h6>
+          <h6 className="hero-greeting">Hello, I'm 👋</h6>
           <h1 className="hero-title">ADITYA SHRIWAS</h1>
           <h2 className="hero-subtitle">
             <span className="typewriter">{data.title}</span>
@@ -1259,7 +1260,9 @@ function HeroSection({ data }) {
         <div className="hero-visual">
           <div className="image-container">
             <div className="main-image">
-              <img src="/531500995_18088666294758908_1262871774284512153_n.jpg" alt="AdityA shriwas" />
+           
+             <img src={process.env.PUBLIC_URL + "/531500995_18088666294758908_1262871774284512153_n.jpg"} alt="AdityA shriwas" />
+
             </div>
             <div className="tech-orbit">
               <div className="tech-icon" title="React"><i className="fab fa-react"></i></div>
