@@ -1292,7 +1292,7 @@ function HeroSection({ data }) {
         <div className="hero-visual">
           <div className="image-container">
             <div className="main-image">
-              <img src={process.env.PUBLIC_URL + "531500995_18088666294758908_1262871774284512153_n.jpg"} alt="AdityA shriwas" />
+              <img src={process.env.PUBLIC_URL + "/public/531500995_18088666294758908_1262871774284512153_n.jpg"} alt="AdityA shriwas" />
             </div>
             <div className="tech-orbit">
               <div className="tech-icon" title="React"><i className="fab fa-react"></i></div>
