@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import emailjs from '@emailjs/browser';
 
-
 // Sample data - replace with your actual information
 const portfolioData = {
   name: "ADITYA's portfolio",
@@ -9,7 +8,7 @@ const portfolioData = {
   about: "I'm a passionate developer with expertise in creating web applications using modern technologies. I enjoy turning complex problems into simple, beautiful solutions.",
   email: "ashriwas688@gmail.com",
   phone: "+917028685307",
-  address: "INDIA,PUNE",
+  address: "INDIA, PUNE",
   socialMedia: [
     { name: "GitHub", url: "https://github.com/kuroo9", icon: "github" },
     { name: "LinkedIn", url: "https://www.linkedin.com/in/aditya-shriwas-ab4201248/", icon: "linkedin" },
@@ -122,6 +121,8 @@ export default function App() {
           --background-alt: #f7f7f7;
           --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
           --transition: all 0.5s ease-in-out;
+          --success-color: #28a745;
+          --error-color: #dc3545;
         }
 
         body {
@@ -130,6 +131,7 @@ export default function App() {
           color: var(--text-color);
           background: var(--background);
           overflow-x: hidden;
+          margin: 0;
         }
 
         .container {
@@ -355,6 +357,11 @@ export default function App() {
           color: white;
         }
 
+        .btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
         .hero-visual {
           display: flex;
           justify-content: center;
@@ -471,11 +478,6 @@ export default function App() {
           bottom: -10px;
           right: -10px;
           animation-delay: 0.5s;
-        }
-
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-20px); }
         }
 
         .scroll-indicator {
@@ -965,6 +967,7 @@ export default function App() {
 
         .form-group textarea {
           resize: vertical;
+          min-height: 120px;
         }
 
         .contact-form .btn {
@@ -975,18 +978,30 @@ export default function App() {
         }
 
         .form-message {
-          margin-top: 1rem;
+          margin-top: 1.5rem;
+          padding: 1rem;
+          border-radius: 5px;
           text-align: center;
-          font-size: 1rem;
+          font-size: 0.95rem;
           font-weight: 500;
+          animation: fadeIn 0.3s ease;
+          clear: both;
         }
 
         .form-message.success {
-          color: var(--primary-color);
+          background: rgba(40, 167, 69, 0.1);
+          color: var(--success-color);
+          border: 1px solid rgba(40, 167, 69, 0.2);
         }
 
         .form-message.error {
-          color: var(--secondary-color);
+          background: rgba(220, 53, 69, 0.1);
+          color: var(--error-color);
+          border: 1px solid rgba(220, 53, 69, 0.2);
+        }
+
+        .form-message i {
+          margin-right: 0.5rem;
         }
 
         /* Footer Section */
@@ -1048,6 +1063,10 @@ export default function App() {
         .footer-bottom {
           border-top: 1px solid rgba(255, 255, 255, 0.1);
           padding-top: 1rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 1rem;
         }
 
         .footer-bottom p {
@@ -1074,6 +1093,16 @@ export default function App() {
         @keyframes slideInUp {
           from { transform: translateY(50px); opacity: 0; }
           to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Loading spinner */
+        .fa-spin {
+          animation: fa-spin 1s infinite linear;
+        }
+
+        @keyframes fa-spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
 
         /* Responsive Design */
@@ -1168,10 +1197,13 @@ export default function App() {
           .projects-grid {
             grid-template-columns: 1fr;
           }
+          .image-container {
+            width: 280px;
+            height: 280px;
+          }
         }
       `}</style>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-      <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
       <div className="App">
         <Navigation activeSection={activeSection} isScrolled={isScrolled} />
         <HeroSection data={portfolioData} />
@@ -1260,9 +1292,7 @@ function HeroSection({ data }) {
         <div className="hero-visual">
           <div className="image-container">
             <div className="main-image">
-           
-             <img src={process.env.PUBLIC_URL + "/531500995_18088666294758908_1262871774284512153_n.jpg"} alt="AdityA shriwas" />
-
+              <img src={process.env.PUBLIC_URL + "/531500995_18088666294758908_1262871774284512153_n.jpg"} alt="AdityA shriwas" />
             </div>
             <div className="tech-orbit">
               <div className="tech-icon" title="React"><i className="fab fa-react"></i></div>
@@ -1409,10 +1439,10 @@ function ProjectsSection({ data }) {
                 <img src={project.image} alt={project.title} />
                 <div className="project-overlay">
                   <div className="project-links">
-                    <a href={project.liveUrl} className="project-link">
+                    <a href={project.liveUrl} className="project-link" target="_blank" rel="noopener noreferrer">
                       <i className="fas fa-eye"></i>
                     </a>
-                    <a href={project.githubUrl} className="project-link">
+                    <a href={project.githubUrl} className="project-link" target="_blank" rel="noopener noreferrer">
                       <i className="fab fa-github"></i>
                     </a>
                   </div>
@@ -1435,7 +1465,10 @@ function ProjectsSection({ data }) {
   );
 }
 
-// Contact Section Component
+// Contact Section Component - UPDATED WITH WORKING FORM
+// Contact Section Component - SIMPLIFIED WORKING VERSION
+// Contact Section Component - Using Formspree (Recommended)
+// Contact Section Component - WORKING WITH FORMSPREE
 function ContactSection({ data }) {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formStatus, setFormStatus] = useState('');
@@ -1445,27 +1478,61 @@ function ContactSection({ data }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Basic validation
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      setFormStatus('error-empty');
+      setTimeout(() => setFormStatus(''), 3000);
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setFormStatus('error-email');
+      setTimeout(() => setFormStatus(''), 3000);
+      return;
+    }
+
     setFormStatus('sending');
-    emailjs.send(
-      process.env.REACT_APP_EMAILJS_SERVICE_ID,
-      process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
-      {
-        from_name: formData.name,
-        from_email: formData.email,
-        message: formData.message,
-      },
-      process.env.REACT_APP_EMAILJS_PUBLIC_KEY
-    )
-    .then(() => {
-      setFormStatus('success');
-      setFormData({ name: '', email: '', message: '' });
-    })
-    .catch((error) => {
-      console.error('EmailJS error:', error);
+
+    try {
+      // USING YOUR FORMSPREE ENDPOINT
+      const response = await fetch('https://formspree.io/f/xjgbvggg', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          _subject: `📧 New Portfolio Message from ${formData.name}`,
+          _replyto: formData.email,
+          _cc: formData.email, // CC the sender
+          _format: 'plain'
+        })
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log('Form submitted successfully:', result);
+        setFormStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+        setTimeout(() => setFormStatus(''), 5000);
+      } else {
+        console.error('Formspree error:', result);
+        throw new Error(result.error || 'Form submission failed');
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
       setFormStatus('error');
-    });
+      setTimeout(() => setFormStatus(''), 5000);
+    }
   };
 
   return (
@@ -1487,25 +1554,33 @@ function ContactSection({ data }) {
                 <div className="contact-icon">
                   <i className="fas fa-envelope"></i>
                 </div>
-                <div className="detail-content">
+                <div className="contact-text">
                   <h4>Email</h4>
-                  <p>{data.email}</p>
+                  <p>
+                    <a href={`mailto:${data.email}`} style={{color: 'inherit', textDecoration: 'none'}}>
+                      {data.email}
+                    </a>
+                  </p>
                 </div>
               </div>
               <div className="contact-item">
                 <div className="contact-icon">
                   <i className="fas fa-phone"></i>
                 </div>
-                <div className="detail-content">
+                <div className="contact-text">
                   <h4>Phone</h4>
-                  <p>{data.phone}</p>
+                  <p>
+                    <a href={`tel:${data.phone.replace(/\s/g, '')}`} style={{color: 'inherit', textDecoration: 'none'}}>
+                      {data.phone}
+                    </a>
+                  </p>
                 </div>
               </div>
               <div className="contact-item">
                 <div className="contact-icon">
                   <i className="fas fa-map-marker-alt"></i>
                 </div>
-                <div className="detail-content">
+                <div className="contact-text">
                   <h4>Location</h4>
                   <p>{data.address}</p>
                 </div>
@@ -1520,6 +1595,7 @@ function ContactSection({ data }) {
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="social-link"
+                  title={social.name}
                 >
                   <i className={`fab fa-${social.icon}`}></i>
                 </a>
@@ -1532,38 +1608,81 @@ function ContactSection({ data }) {
               <input 
                 type="text" 
                 name="name"
-                placeholder="Your Name" 
+                placeholder="Your Name *" 
                 value={formData.name}
                 onChange={handleChange}
                 required 
+                disabled={formStatus === 'sending'}
               />
             </div>
             <div className="form-group">
               <input 
                 type="email" 
                 name="email"
-                placeholder="Your Email" 
+                placeholder="Your Email *" 
                 value={formData.email}
                 onChange={handleChange}
                 required 
+                disabled={formStatus === 'sending'}
               />
             </div>
             <div className="form-group">
               <textarea 
                 name="message"
-                placeholder="Your Message" 
+                placeholder="Your Message *" 
                 rows="5" 
                 value={formData.message}
                 onChange={handleChange}
                 required
+                disabled={formStatus === 'sending'}
               ></textarea>
             </div>
-            <button type="submit" className="btn btn-primary" disabled={formStatus === 'sending'}>
-              {formStatus === 'sending' ? 'Sending...' : 'Send Message'}
-              <i className="fas fa-paper-plane"></i>
+            
+            <button 
+              type="submit" 
+              className="btn btn-primary" 
+              disabled={formStatus === 'sending'}
+            >
+              {formStatus === 'sending' ? (
+                <>
+                  <i className="fas fa-spinner fa-spin"></i> Sending...
+                </>
+              ) : (
+                <>
+                  Send Message <i className="fas fa-paper-plane"></i>
+                </>
+              )}
             </button>
-            {formStatus === 'success' && <p className="form-message success">Message sent successfully! Thank you.</p>}
-            {formStatus === 'error' && <p className="form-message error">Failed to send message. Please try again later.</p>}
+            
+            {formStatus === 'success' && (
+              <div className="form-message success">
+                <i className="fas fa-check-circle"></i> 
+                Message sent successfully! I'll get back to you soon.
+                <br />
+                <small>Check your email for a copy of this message.</small>
+              </div>
+            )}
+            
+            {formStatus === 'error' && (
+              <div className="form-message error">
+                <i className="fas fa-exclamation-circle"></i> 
+                Failed to send. Please try again or email me directly.
+              </div>
+            )}
+            
+            {formStatus === 'error-empty' && (
+              <div className="form-message error">
+                <i className="fas fa-exclamation-circle"></i> 
+                Please fill in all required fields.
+              </div>
+            )}
+            
+            {formStatus === 'error-email' && (
+              <div className="form-message error">
+                <i className="fas fa-exclamation-circle"></i> 
+                Please enter a valid email address.
+              </div>
+            )}
           </form>
         </div>
       </div>
@@ -1573,6 +1692,8 @@ function ContactSection({ data }) {
 
 // Footer Component
 function Footer({ data }) {
+  const currentYear = new Date().getFullYear();
+  
   return (
     <footer className="footer">
       <div className="container">
@@ -1597,6 +1718,7 @@ function Footer({ data }) {
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="social-link"
+                title={social.name}
               >
                 <i className={`fab fa-${social.icon}`}></i>
               </a>
@@ -1605,7 +1727,7 @@ function Footer({ data }) {
         </div>
         
         <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} {data.name}. All rights reserved.</p>
+          <p>&copy; {currentYear} {data.name}. All rights reserved.</p>
           <span style={{ fontSize: '1.5rem', animation: 'float 3s ease-in-out infinite' }}>🚀</span>
         </div>
       </div>
